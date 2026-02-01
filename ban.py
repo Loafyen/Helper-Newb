@@ -1,0 +1,22 @@
+import discord
+from discord.ext import commands
+
+async def setup(bot):
+
+    @bot.command()
+    @commands.has_permissions(ban_members=True)
+    async def ban(ctx, member: discord.Member, *, reason=None):
+        if member == ctx.author:
+            return await ctx.send("❌ You can't ban yourself.")
+
+        await member.ban(reason=reason)
+        await ctx.send(f"🔨 Banned {member.mention}")
+
+    @ban.error
+    async def ban_error(ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            await ctx.send("❌ You don't have permission to use this.")
+        elif isinstance(error, commands.MissingRequiredArgument):
+            await ctx.send("❌ Usage: `?ban @user [reason]`")
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send("❌ Couldn't find that user.")
