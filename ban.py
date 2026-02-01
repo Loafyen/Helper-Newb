@@ -23,21 +23,16 @@ async def setup(bot):
 
     @bot.command()
     @commands.has_permissions(ban_members=True)
-    async def unban(ctx, *, user):
-        banned_users = [entry async for entry in ctx.guild.bans()]
-        name, discriminator = user.split("#")
-
-        for entry in banned_users:
-            if (entry.user.name, entry.user.discriminator) == (name, discriminator):
-                await ctx.guild.unban(entry.user)
-                await ctx.send(f"✅ Unbanned {entry.user.name}#{entry.user.discriminator}")
-                return
-
-        await ctx.send("❌ User not found in ban list.")
+    async def unban(ctx, user_id: int):
+        user = await bot.fetch_user(user_id)
+        await ctx.guild.unban(user)
+        await ctx.send(f"✅ Unbanned {user}")
 
     @unban.error
     async def unban_error(ctx, error):
         if isinstance(error, commands.MissingPermissions):
             await ctx.send("❌ You don't have permission to use this.")
         elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("❌ Usage: `?unban username#1234`")
+            await ctx.send("❌ Usage: `?unban user_id`")
+        elif isinstance(error, commands.BadArgument):
+            await ctx.send("❌ Invalid user ID.")
