@@ -17,6 +17,7 @@ async def load():
     await bot.load_extension("logs")
     await bot.load_extension("fun")
     await bot.load_extension("ban")
+    await bot.load_extension("role")
 
 bot.setup_hook = load
 
