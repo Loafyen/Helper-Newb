@@ -12,15 +12,11 @@ bot = commands.Bot(command_prefix="?", intents=intents)
 async def on_ready():
     print(f"Logged in as {bot.user}")
 
-@bot.command()
-async def test(ctx):
-    await ctx.send("hi")
-
-# Load command files
 async def load():
     await bot.load_extension("tickets")
     await bot.load_extension("logs")
     await bot.load_extension("fun")
+    await bot.load_extension("ban")
 
 bot.setup_hook = load
 
