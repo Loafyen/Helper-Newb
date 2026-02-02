@@ -1,30 +1,26 @@
 import discord
 from discord.ext import commands
 
+OWNER_ID = 918628339663634492  # <-- replace with YOUR user ID
+
 async def setup(bot):
 
     @bot.command()
     @commands.has_permissions(manage_roles=True)
     async def role(ctx, role: discord.Role, member: discord.Member):
-        if member == ctx.author:
-            return await ctx.send("❌ You can't give a role to yourself.")
+        if member.id == OWNER_ID:
+            return await ctx.send("😈 You are immune to role changes.")
 
-        # Check if bot can manage the role
         if role >= ctx.guild.me.top_role:
-            return await ctx.send("❌ I can't manage that role because it's higher than my highest role.")
+            return await ctx.send("❌ I can't manage that role.")
 
-        try:
-            await member.add_roles(role)
-            await ctx.send(f"✅ Gave {member.mention} the {role.name} role.")
-        except discord.Forbidden:
-            await ctx.send("❌ I don't have permission to add this role.")
-        except Exception as e:
-            await ctx.send(f"❌ An error occurred: {e}")
+        await member.add_roles(role)
+        await ctx.send(f"✅ Gave {member.mention} the {role.name} role.")
 
     @role.error
     async def role_error(ctx, error):
         if isinstance(error, commands.MissingPermissions):
-            await ctx.send("❌ You don't have permission to use this command.")
+            await ctx.send("❌ You don't have permission to use this.")
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("❌ Usage: `?role @role @user`")
         elif isinstance(error, commands.BadArgument):
