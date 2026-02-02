@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import os
 
-OWNER_ID = 918628339663634492  # <-- replace with YOUR user ID
+OWNER_ID = 918628339663634492
 
 intents = discord.Intents.default()
 intents.message_content = True
