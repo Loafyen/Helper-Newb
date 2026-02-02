@@ -2,11 +2,20 @@ import discord
 from discord.ext import commands
 import os
 
+OWNER_ID = 123456789012345678  # <-- replace with YOUR user ID
+
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
-bot = commands.Bot(command_prefix="?", intents=intents)
+class CustomBot(commands.Bot):
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions) and ctx.author.id == OWNER_ID:
+            await ctx.reinvoke()
+        else:
+            raise error
+
+bot = CustomBot(command_prefix="?", intents=intents)
 
 @bot.event
 async def on_ready():
