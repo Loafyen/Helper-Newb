@@ -2,8 +2,9 @@ import discord
 from discord.ext import commands
 import asyncio
 import os
+import sys
 
-OWNER_IDS = {918628339663634492, 1424568124136624148}  # <-- put your Discord user ID(s) here
+OWNER_IDS = {918628339663634492, 1424568124136624148}  # your IDs
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -27,4 +28,9 @@ async def load():
 
 asyncio.run(load())
 
-bot.run(os.environ["DISCORD_TOKEN"])
+token = os.getenv("DISCORD_TOKEN")
+if not token:
+    print("❌ DISCORD_TOKEN not found in environment. Exiting.")
+    sys.exit(1)
+
+bot.run(token)
