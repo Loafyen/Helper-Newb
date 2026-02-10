@@ -4,7 +4,7 @@ import asyncio
 import os
 import sys
 
-OWNER_IDS = {918628339663634492, 1424568124136624148}  # your IDs
+OWNER_IDS = {918628339663634492, 1424568124136624148}  # your Discord ID(s)
 
 intents = discord.Intents.default()
 intents.message_content = True
