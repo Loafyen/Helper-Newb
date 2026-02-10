@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-OWNER_ID = 918628339663634492
+OWNER_ID = {918628339663634492, 1424568124136624148}
 
 def is_owner_or_perm(**perms):
     async def predicate(ctx):
