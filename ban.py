@@ -1,11 +1,16 @@
 import discord
 from discord.ext import commands
 
+OWNER_ID = 123456789012345678  # <-- replace with YOUR user ID
+
 async def setup(bot):
 
     @bot.command()
     @commands.has_permissions(ban_members=True)
     async def ban(ctx, member: discord.Member, *, reason=None):
+        if member.id == OWNER_ID:
+            return await ctx.send("😈 You are immune to bans.")
+
         if member == ctx.author:
             return await ctx.send("❌ You can't ban yourself.")
 
