@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from datetime import timedelta
 
-OWNER_ID = 918628339663634492  # <-- replace with YOUR user ID
+OWNER_ID = 123456789012345678  # <-- replace with YOUR user ID
 
 def is_owner_or_perm(**perms):
     async def predicate(ctx):
@@ -24,8 +24,13 @@ async def setup(bot):
 
         duration = timedelta(minutes=minutes)
         await member.timeout(duration, reason=f"Muted by {ctx.author}")
-
         await ctx.send(f"🔇 Muted {member.mention} for {minutes} minute(s).")
+
+    @bot.command()
+    @is_owner_or_perm(moderate_members=True)
+    async def unmute(ctx, member: discord.Member):
+        await member.timeout(None)
+        await ctx.send(f"🔊 Unmuted {member.mention}")
 
     @mute.error
     async def mute_error(ctx, error):
