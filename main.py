@@ -1,36 +1,33 @@
 import discord
 from discord.ext import commands
-import asyncio
 import os
-import sys
 
-OWNER_IDS = {918628339663634492, 1424568124136624148}  # your Discord ID(s)
+OWNER_ID = 918628339663634492  # <-- replace with YOUR user ID
 
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
-intents.moderation = True
 
-bot = commands.Bot(command_prefix="?", intents=intents)
-bot.OWNER_IDS = OWNER_IDS
+class CustomBot(commands.Bot):
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions) and ctx.author.id == OWNER_ID:
+            await ctx.reinvoke()
+        else:
+            raise error
+
+bot = CustomBot(command_prefix="?", intents=intents)
 
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user}")
 
 async def load():
-    await bot.load_extension("ban")
-    await bot.load_extension("kick")
-    await bot.load_extension("mute")
-    await bot.load_extension("role")
     await bot.load_extension("tickets")
     await bot.load_extension("logs")
+    await bot.load_extension("fun")
+    await bot.load_extension("ban")
+    await bot.load_extension("role")
 
-asyncio.run(load())
+bot.setup_hook = load
 
-token = os.getenv("DISCORD_TOKEN")
-if not token:
-    print("❌ DISCORD_TOKEN not found in environment. Exiting.")
-    sys.exit(1)
-
-bot.run(token)
+bot.run(os.getenv("TOKEN"))
