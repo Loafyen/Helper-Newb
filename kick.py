@@ -1,22 +1,20 @@
 import discord
 from discord.ext import commands
 
-OWNER_ID = {918628339663634492, 1424568124136624148}
-
-def is_owner_or_perm(**perms):
-    async def predicate(ctx):
-        if ctx.author.id == OWNER_ID:
-            return True
-        return ctx.author.guild_permissions.is_superset(discord.Permissions(**perms))
-    return commands.check(predicate)
-
 async def setup(bot):
+
+    def is_owner_or_perm(**perms):
+        async def predicate(ctx):
+            if ctx.author.id in bot.OWNER_IDS:
+                return True
+            return ctx.author.guild_permissions.is_superset(discord.Permissions(**perms))
+        return commands.check(predicate)
 
     @bot.command()
     @is_owner_or_perm(kick_members=True)
     async def kick(ctx, member: discord.Member, *, reason=None):
-        if member.id == OWNER_ID:
-            return await ctx.send("no lmao")
+        if member.id in bot.OWNER_IDS:
+            return await ctx.send("😈 That user is immune.")
 
         await member.kick(reason=reason)
         await ctx.send(f"👢 Kicked {member.mention}")
@@ -24,8 +22,6 @@ async def setup(bot):
     @kick.error
     async def kick_error(ctx, error):
         if isinstance(error, commands.MissingPermissions):
-            await ctx.send("❌ You don't have permission to use this.")
-        elif isinstance(error, commands.MissingRequiredArgument):
-            await ctx.send("❌ Usage: `?kick @user [reason]`")
+            await ctx.send("❌ You don't have permission.")
         elif isinstance(error, commands.BadArgument):
-            await ctx.send("❌ Couldn't find that user.")
+            await ctx.send("❌ User not found.")
