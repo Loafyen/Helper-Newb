@@ -33,4 +33,4 @@ if not token:
     print("❌ DISCORD_TOKEN not found in environment. Exiting.")
     sys.exit(1)
 
-bot.run(token)
+bot.run(DISCORD_TOKEN)
