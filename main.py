@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import os
 
-OWNER_ID = 123456789012345678  # <-- replace with YOUR user ID
+OWNER_ID = 918628339663634492
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -27,6 +27,8 @@ async def load():
     await bot.load_extension("fun")
     await bot.load_extension("ban")
     await bot.load_extension("role")
+    await bot.load_extension("kick")
+    await bot.load_extension("mute")
 
 bot.setup_hook = load
 
