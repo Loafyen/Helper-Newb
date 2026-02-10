@@ -10,9 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Railway CLI
+        run: curl -sSL https://railway.app/install.sh | sh
+
       - name: Deploy to Railway
-        uses: railwayapp/cli-action@v3
-        with:
-          railwayToken: ${{ secrets.RAILWAY_TOKEN }}
         env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+        run: railway up --detach
