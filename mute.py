@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 from datetime import timedelta
 
-OWNER_ID = 123456789012345678  # <-- replace with YOUR user ID
+OWNER_ID = 918628339663634492  # me
 
 def is_owner_or_perm(**perms):
     async def predicate(ctx):
